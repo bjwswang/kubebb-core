@@ -1,0 +1,16 @@
+apiVersion: core.kubebb.k8s.com.cn/v1alpha1
+kind: ComponentPlan
+metadata:
+  name: grafana-oidc
+  namespace: obs
+spec:
+  approved: true
+  component:
+    name: grafana.grafana
+    namespace: kubebb-system
+  name: grafana-oidc
+  override:
+    set:
+      - "ingress.enabled=true"
+      - "ingress.annotations.kubernetes.io/ingress.class=portal-ingress"
+  version: 9.5.5
