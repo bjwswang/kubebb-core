@@ -287,53 +287,64 @@ func FilterMatchVersionConstraint(cond FilterCond, version string) bool {
 	return false
 }
 
+// MatchOne agains `VersionedFilter`
+func MatchOne(version *hrepo.ChartVersion, filterCond FilterCond, funcs ...FilterFunc) bool {
+	if filterCond.VersionedFilterCond == nil {
+		return true
+	}
+	for _, f := range funcs {
+		if f(filterCond, version.Version) {
+			return true
+		}
+	}
+	return false
+}
+
 // Match determines if this component is retained, and if so, filters for conforming versions.
 func Match(fc map[string]FilterCond, filter Filter, funcs ...FilterFunc) ([]int, bool) {
-	var (
-		versions []int
-		keep     bool
-	)
 	if len(funcs) == 0 {
 		funcs = defaultFilterFuncs
 	}
 
+	var (
+		// versions to be kept
+		versions []int
+	)
+
 	// If the chart package name is not in the fc or filterCond.Enabled=false, we will keep all versions of the chart package.
 	filterCond, ok := fc[filter.Name]
-	if !ok || !filterCond.Enabled {
+	if !ok {
 		for i := range filter.Versions {
 			versions = append(versions, i)
 		}
 		return versions, true
 	}
 
-	// If filterCond.Enabled=true and filterCond.VersionedFilterCond=nil, we will not keep all versions of the chart package.
-	if filterCond.Enabled && filterCond.VersionedFilterCond == nil {
-		return versions, false
-	}
-
-	// If any filter function is satisfied, we will not keep the version.
-	// Then if filterCond.deprecated=false, we will also not keep the deprecated version.
 	for i, v := range filter.Versions {
-		keep = true
-		for _, f := range funcs {
-			if f(filterCond, v.Version) {
-				keep = false
-				break
+		// DO NOT KEEP
+		if !filterCond.KeepDeprecated && v.Deprecated {
+			continue
+		}
+
+		match := MatchOne(v, filterCond, funcs...)
+
+		// 精准保留
+		if filterCond.Keep {
+			if match {
+				versions = append(versions, i)
+			}
+		} else {
+			// 精准过滤
+			if !match {
+				versions = append(versions, i)
 			}
 		}
-		if !filterCond.Deprecated && v.Deprecated {
-			keep = false
-		}
-		if keep {
-			versions = append(versions, i)
-		}
 	}
-
 	return versions, len(versions) != 0
 }
 
 func IsCondSame(c1, c2 FilterCond) bool {
-	return c1.Name == c2.Name && c1.Deprecated == c2.Deprecated && c1.Enabled == c2.Enabled &&
+	return c1.Name == c2.Name && c1.KeepDeprecated == c2.KeepDeprecated && c1.Keep == c2.Keep &&
 		((c1.VersionedFilterCond == nil && c2.VersionedFilterCond == nil) ||
 			(c1.VersionedFilterCond != nil && c2.VersionedFilterCond != nil &&
 				sets.NewString(c1.VersionedFilterCond.Versions...).Equal(sets.NewString(c2.VersionedFilterCond.Versions...)) &&
