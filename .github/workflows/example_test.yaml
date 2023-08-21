@@ -2,7 +2,7 @@ name: Kubebb Core Example Test
 
 on:
   push:
-    branches: [main]
+    branches: [portal]
   pull_request:
     branches: [main]
   workflow_dispatch:

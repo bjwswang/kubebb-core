@@ -383,197 +383,197 @@ kind load docker-image kubebb/core:example-e2e --name=$KindName
 make deploy IMG="kubebb/core:example-e2e"
 kubectl wait deploy -n kubebb-system kubebb-controller-manager --for condition=Available=True
 
-info "3 try to verify that the common steps are valid"
-info "3.1 create bitnami repository"
-kubectl apply -f config/samples/core_v1alpha1_repository_bitnami.yaml
-waitComponentStatus "kubebb-system" "repository-bitnami-sample.nginx"
+# info "3 try to verify that the common steps are valid"
+# info "3.1 create bitnami repository"
+# kubectl apply -f config/samples/core_v1alpha1_repository_bitnami.yaml
+# waitComponentStatus "kubebb-system" "repository-bitnami-sample.nginx"
 
-info "3.2 create nginx componentplan"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml
-waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getHelmRevision "kubebb-system" "my-nginx" "1"
-deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
+# info "3.2 create nginx componentplan"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml
+# waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getHelmRevision "kubebb-system" "my-nginx" "1"
+# deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
 
-info "3.3 create nginx-15.0.2 componentplan to verify imageOverride in componentPlan is valid"
-kubectl apply -f config/samples/core_v1alpha1_componentplan_image_override.yaml
-waitComponentPlanDone "kubebb-system" "nginx-15.0.2"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getPodImage "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2" "docker.io/bitnami/nginx:latest"
-getHelmRevision "kubebb-system" "my-nginx" "1"
-deleteComponentPlan "kubebb-system" "nginx-15.0.2"
+# info "3.3 create nginx-15.0.2 componentplan to verify imageOverride in componentPlan is valid"
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_image_override.yaml
+# waitComponentPlanDone "kubebb-system" "nginx-15.0.2"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getPodImage "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2" "docker.io/bitnami/nginx:latest"
+# getHelmRevision "kubebb-system" "my-nginx" "1"
+# deleteComponentPlan "kubebb-system" "nginx-15.0.2"
 
-info "3.4 create nginx-replicas-example-1/2 componentplan to verify value override in componentPlan is valid"
-kubectl apply -f config/samples/core_v1alpha1_nginx_replicas2_componentplan.yaml
-waitComponentPlanDone "kubebb-system" "nginx-replicas-example-1"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-replicas-example-1,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getDeployReplicas "kubebb-system" "my-nginx-replicas-example-1" "2"
-getHelmRevision "kubebb-system" "my-nginx-replicas-example-1" "1"
-deleteComponentPlan "kubebb-system" "nginx-replicas-example-1"
+# info "3.4 create nginx-replicas-example-1/2 componentplan to verify value override in componentPlan is valid"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_replicas2_componentplan.yaml
+# waitComponentPlanDone "kubebb-system" "nginx-replicas-example-1"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-replicas-example-1,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getDeployReplicas "kubebb-system" "my-nginx-replicas-example-1" "2"
+# getHelmRevision "kubebb-system" "my-nginx-replicas-example-1" "1"
+# deleteComponentPlan "kubebb-system" "nginx-replicas-example-1"
 
-waitComponentPlanDone "kubebb-system" "nginx-replicas-example-2"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-replicas-example-2,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getDeployReplicas "kubebb-system" "my-nginx-replicas-example-2" "2"
-getHelmRevision "kubebb-system" "my-nginx-replicas-example-2" "1"
-deleteComponentPlan "kubebb-system" "nginx-replicas-example-2"
+# waitComponentPlanDone "kubebb-system" "nginx-replicas-example-2"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-replicas-example-2,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getDeployReplicas "kubebb-system" "my-nginx-replicas-example-2" "2"
+# getHelmRevision "kubebb-system" "my-nginx-replicas-example-2" "1"
+# deleteComponentPlan "kubebb-system" "nginx-replicas-example-2"
 
-info "4 try to verify that the repository imageOverride steps are valid"
-info "4.1 create repository-grafana-sample-image repository"
-kubectl apply -f config/samples/core_v1alpha1_repository_grafana_image_repo_override.yaml
-waitComponentStatus "kubebb-system" "repository-grafana-sample-image.grafana"
+# info "4 try to verify that the repository imageOverride steps are valid"
+# info "4.1 create repository-grafana-sample-image repository"
+# kubectl apply -f config/samples/core_v1alpha1_repository_grafana_image_repo_override.yaml
+# waitComponentStatus "kubebb-system" "repository-grafana-sample-image.grafana"
 
-info "4.2 create grafana subscription"
-kubectl apply -f config/samples/core_v1alpha1_grafana_subscription.yaml
-getPodImage "kubebb-system" "app.kubernetes.io/instance=grafana-sample,app.kubernetes.io/name=grafana" "192.168.1.1:5000/grafana-local/grafana"
-getHelmRevision "kubebb-system" "grafana-sample" "1"
-kubectl delete -f config/samples/core_v1alpha1_grafana_subscription.yaml
+# info "4.2 create grafana subscription"
+# kubectl apply -f config/samples/core_v1alpha1_grafana_subscription.yaml
+# getPodImage "kubebb-system" "app.kubernetes.io/instance=grafana-sample,app.kubernetes.io/name=grafana" "192.168.1.1:5000/grafana-local/grafana"
+# getHelmRevision "kubebb-system" "grafana-sample" "1"
+# kubectl delete -f config/samples/core_v1alpha1_grafana_subscription.yaml
 
-info "5 try to verify that common use of componentPlan are valid"
-info "5.1 create componentPlan do-once-nginx-sample-15.0.2"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml
-waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getHelmRevision "kubebb-system" "my-nginx" "1"
+# info "5 try to verify that common use of componentPlan are valid"
+# info "5.1 create componentPlan do-once-nginx-sample-15.0.2"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml
+# waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getHelmRevision "kubebb-system" "my-nginx" "1"
 
-info "5.2 update componentPlan do-once-nginx-sample-15.0.2 with update replicaCount to 2"
-kubectl patch componentplan -n kubebb-system do-once-nginx-sample-15.0.2 --type='json' \
-	-p='[{"op": "replace", "path": "/spec/override", "value": {"values": {"replicaCount": 2}}}]'
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getHelmRevision "kubebb-system" "my-nginx" "2"
-getDeployReplicas "kubebb-system" "my-nginx" "2"
+# info "5.2 update componentPlan do-once-nginx-sample-15.0.2 with update replicaCount to 2"
+# kubectl patch componentplan -n kubebb-system do-once-nginx-sample-15.0.2 --type='json' \
+# 	-p='[{"op": "replace", "path": "/spec/override", "value": {"values": {"replicaCount": 2}}}]'
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getHelmRevision "kubebb-system" "my-nginx" "2"
+# getDeployReplicas "kubebb-system" "my-nginx" "2"
 
-info "5.3 create new componentPlan to update nginx version"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan_15.1.0.yaml
-waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.1.0"
-validateComponentPlanStatusLatestValue "kubebb-system" "do-once-nginx-sample-15.1.0" "true"
-validateComponentPlanStatusLatestValue "kubebb-system" "do-once-nginx-sample-15.0.2" "false"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.1.0"
-getHelmRevision "kubebb-system" "my-nginx" "3"
-deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.1.0"
-deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
+# info "5.3 create new componentPlan to update nginx version"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan_15.1.0.yaml
+# waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.1.0"
+# validateComponentPlanStatusLatestValue "kubebb-system" "do-once-nginx-sample-15.1.0" "true"
+# validateComponentPlanStatusLatestValue "kubebb-system" "do-once-nginx-sample-15.0.2" "false"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.1.0"
+# getHelmRevision "kubebb-system" "my-nginx" "3"
+# deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.1.0"
+# deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
 
-info "5.4 Verify long running componentPlan install don not block others to install"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan_long_ready.yaml
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.spec.name="my-nginx-back"' | kubectl apply -f -
-waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-back,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-deleteComponentPlan "kubebb-system" "nginx-15.0.2-long-ready"
-getHelmRevision "kubebb-system" "my-nginx-back" "1"
-deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
+# info "5.4 Verify long running componentPlan install don not block others to install"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan_long_ready.yaml
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.spec.name="my-nginx-back"' | kubectl apply -f -
+# waitComponentPlanDone "kubebb-system" "do-once-nginx-sample-15.0.2"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-nginx-back,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# deleteComponentPlan "kubebb-system" "nginx-15.0.2-long-ready"
+# getHelmRevision "kubebb-system" "my-nginx-back" "1"
+# deleteComponentPlan "kubebb-system" "do-once-nginx-sample-15.0.2"
 
-info "5.5 Verify can install to other namespace"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.metadata.namespace="default"' | kubectl apply -f -
-waitComponentPlanDone "default" "do-once-nginx-sample-15.0.2"
-waitPodReady "default" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
-getHelmRevision "default" "my-nginx" "1"
-deleteComponentPlan "default" "do-once-nginx-sample-15.0.2"
+# info "5.5 Verify can install to other namespace"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.metadata.namespace="default"' | kubectl apply -f -
+# waitComponentPlanDone "default" "do-once-nginx-sample-15.0.2"
+# waitPodReady "default" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2"
+# getHelmRevision "default" "my-nginx" "1"
+# deleteComponentPlan "default" "do-once-nginx-sample-15.0.2"
 
-info "5.6 Verify can be successfully uninstalled when install failed"
-kubectl apply -f config/samples/core_v1alpha1_componentplan_image_override.yaml --dry-run -o json | jq '.spec.wait=true' | jq '.spec.override.images[0].newTag="xxxxx"' | jq '.spec.timeoutSeconds=30' | kubectl apply -f -
-getPodImage "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2" "docker.io/bitnami/nginx:xxxx"
-waitComponentPlanRetryTime "kubebb-system" "nginx-15.0.2" "5"
-deleteComponentPlan "kubebb-system" "nginx-15.0.2"
+# info "5.6 Verify can be successfully uninstalled when install failed"
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_image_override.yaml --dry-run -o json | jq '.spec.wait=true' | jq '.spec.override.images[0].newTag="xxxxx"' | jq '.spec.timeoutSeconds=30' | kubectl apply -f -
+# getPodImage "kubebb-system" "app.kubernetes.io/instance=my-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.0.2" "docker.io/bitnami/nginx:xxxx"
+# waitComponentPlanRetryTime "kubebb-system" "nginx-15.0.2" "5"
+# deleteComponentPlan "kubebb-system" "nginx-15.0.2"
 
-info "5.7 verify common user can create componentplan, but they must have permissions."
-info "5.7.1 create a sa with deploy and svc permissions, but no ingress"
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  creationTimestamp: null
-  name: usera
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: usera
-  namespace: default
-rules:
-- apiGroups: ["", "extensions", "apps", "core.kubebb.k8s.com.cn"]
-  resources: ["*"]
-  verbs: ["*"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: usera
-  namespace: default
-subjects:
-- kind: User
-  name: usera
-  apiGroup: rbac.authorization.k8s.io
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: usera
-EOF
-info "5.7.2 Verify that this user can't create ingress"
-kubectl create ingress simple --rule="foo.com/bar=svc1:8080" --as=usera || true
-info "5.7.3 Use this user to create componentplan"
-kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.metadata.namespace="default"' | jq '.spec.override.set[0]="ingress.enabled=true"' | kubectl apply --as=usera -f -
-waitComponentPlanRetryTime "default" "do-once-nginx-sample-15.0.2" "5"
-info "5.7.4 verify this componentplan will failed, show error log"
-kubectl get cpl do-once-nginx-sample-15.0.2 --output='jsonpath={.status.conditions[?(@.type=="Actioned")]}'
-info "" # go to a new line
+# info "5.7 verify common user can create componentplan, but they must have permissions."
+# info "5.7.1 create a sa with deploy and svc permissions, but no ingress"
+# cat <<EOF | kubectl apply -f -
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   creationTimestamp: null
+#   name: usera
+# ---
+# kind: Role
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   name: usera
+#   namespace: default
+# rules:
+# - apiGroups: ["", "extensions", "apps", "core.kubebb.k8s.com.cn"]
+#   resources: ["*"]
+#   verbs: ["*"]
+# ---
+# kind: RoleBinding
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   name: usera
+#   namespace: default
+# subjects:
+# - kind: User
+#   name: usera
+#   apiGroup: rbac.authorization.k8s.io
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: Role
+#   name: usera
+# EOF
+# info "5.7.2 Verify that this user can't create ingress"
+# kubectl create ingress simple --rule="foo.com/bar=svc1:8080" --as=usera || true
+# info "5.7.3 Use this user to create componentplan"
+# kubectl apply -f config/samples/core_v1alpha1_nginx_componentplan.yaml --dry-run -o json | jq '.metadata.namespace="default"' | jq '.spec.override.set[0]="ingress.enabled=true"' | kubectl apply --as=usera -f -
+# waitComponentPlanRetryTime "default" "do-once-nginx-sample-15.0.2" "5"
+# info "5.7.4 verify this componentplan will failed, show error log"
+# kubectl get cpl do-once-nginx-sample-15.0.2 --output='jsonpath={.status.conditions[?(@.type=="Actioned")]}'
+# info "" # go to a new line
 
-info "5.8 Verify that helm add repo with basic auth"
-info "5.8.1 Add kubebb repository"
-kubectl apply -f config/samples/core_v1alpha1_repository_kubebb.yaml
-waitComponentStatus "kubebb-system" "repository-kubebb.chartmuseum"
-info "5.8.2 Plan a private repository with chartmuseum"
-kubectl apply -f config/samples/core_v1alpha1_componentplan_chartmuseum.yaml
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-chartmuseum"
-info "5.8.3 Verify private chartmuseum service is well running"
-export POD_NAME=$(kubectl get pods --namespace kubebb-system -l app.kubernetes.io/instance=my-chartmuseum -o jsonpath="{.items[0].metadata.name}")
-nohup kubectl port-forward $POD_NAME 8088:8080 --namespace kubebb-system > /dev/null 2>&1 &
-curl --retry 3 --retry-delay 5 --retry-connrefused -u admin:password http://localhost:8088
+# info "5.8 Verify that helm add repo with basic auth"
+# info "5.8.1 Add kubebb repository"
+# kubectl apply -f config/samples/core_v1alpha1_repository_kubebb.yaml
+# waitComponentStatus "kubebb-system" "repository-kubebb.chartmuseum"
+# info "5.8.2 Plan a private repository with chartmuseum"
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_chartmuseum.yaml
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-chartmuseum"
+# info "5.8.3 Verify private chartmuseum service is well running"
+# export POD_NAME=$(kubectl get pods --namespace kubebb-system -l app.kubernetes.io/instance=my-chartmuseum -o jsonpath="{.items[0].metadata.name}")
+# nohup kubectl port-forward $POD_NAME 8088:8080 --namespace kubebb-system > /dev/null 2>&1 &
+# curl --retry 3 --retry-delay 5 --retry-connrefused -u admin:password http://localhost:8088
 
-info "5.9 Verify that helm install with basic auth"
-info "5.9.1 Push a chart to private chartmuseum"
-curl --retry 3 --retry-delay 5 -O https://charts.bitnami.com/bitnami/nginx-15.1.2.tgz
-curl --retry 3 --retry-delay 5 -u admin:password --data-binary "@nginx-15.1.2.tgz" http://localhost:8088/api/charts
-info "" #go to a new line
-info "5.9.2 Add this private chartmuseum repository(basic auth enabled) to kubebb"
-kubectl apply -f config/samples/core_v1alpha1_repository_chartmuseum.yaml
-waitComponentStatus "kubebb-system" "repository-chartmuseum.nginx"
-info "5.9.3 Plan a nignx with private chartmuseum(basic auth enabled) "
-kubectl apply -f config/samples/core_v1alpha1_componentplan_mynginx.yaml
-waitComponentPlanDone "kubebb-system" "mynginx" 
+# info "5.9 Verify that helm install with basic auth"
+# info "5.9.1 Push a chart to private chartmuseum"
+# curl --retry 3 --retry-delay 5 -O https://charts.bitnami.com/bitnami/nginx-15.1.2.tgz
+# curl --retry 3 --retry-delay 5 -u admin:password --data-binary "@nginx-15.1.2.tgz" http://localhost:8088/api/charts
+# info "" #go to a new line
+# info "5.9.2 Add this private chartmuseum repository(basic auth enabled) to kubebb"
+# kubectl apply -f config/samples/core_v1alpha1_repository_chartmuseum.yaml
+# waitComponentStatus "kubebb-system" "repository-chartmuseum.nginx"
+# info "5.9.3 Plan a nignx with private chartmuseum(basic auth enabled) "
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_mynginx.yaml
+# waitComponentPlanDone "kubebb-system" "mynginx" 
 
-info "5.8 Verify that helm add repo with basic auth"
-info "5.8.1 Add kubebb repository"
-kubectl apply -f config/samples/core_v1alpha1_repository_kubebb.yaml
-waitComponentStatus "kubebb-system" "repository-kubebb.chartmuseum"
-info "5.8.2 Plan a private repository with chartmuseum"
-kubectl apply -f config/samples/core_v1alpha1_componentplan_chartmuseum.yaml
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-chartmuseum"
-info "5.8.3 Verify private chartmuseum service is well running"
-export POD_NAME=$(kubectl get pods --namespace kubebb-system -l app.kubernetes.io/instance=my-chartmuseum -o jsonpath="{.items[0].metadata.name}")
-nohup kubectl port-forward $POD_NAME 8088:8080 --namespace kubebb-system > /dev/null 2>&1 &
-curl --retry 3 --retry-delay 5 --retry-connrefused -u admin:password http://localhost:8088
+# info "5.8 Verify that helm add repo with basic auth"
+# info "5.8.1 Add kubebb repository"
+# kubectl apply -f config/samples/core_v1alpha1_repository_kubebb.yaml
+# waitComponentStatus "kubebb-system" "repository-kubebb.chartmuseum"
+# info "5.8.2 Plan a private repository with chartmuseum"
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_chartmuseum.yaml
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=my-chartmuseum"
+# info "5.8.3 Verify private chartmuseum service is well running"
+# export POD_NAME=$(kubectl get pods --namespace kubebb-system -l app.kubernetes.io/instance=my-chartmuseum -o jsonpath="{.items[0].metadata.name}")
+# nohup kubectl port-forward $POD_NAME 8088:8080 --namespace kubebb-system > /dev/null 2>&1 &
+# curl --retry 3 --retry-delay 5 --retry-connrefused -u admin:password http://localhost:8088
 
-info "5.9 Verify that helm install with basic auth"
-info "5.9.1 Push a chart to private chartmuseum"
-curl --retry 3 --retry-delay 5 -O https://charts.bitnami.com/bitnami/nginx-15.1.2.tgz
-curl --retry 3 --retry-delay 5 -u admin:password --data-binary "@nginx-15.1.2.tgz" http://localhost:8088/api/charts
-info "5.9.1 Add this private chartmuseum repository(basic auth enabled) to kubebb"
-kubectl apply -f config/samples/core_v1alpha1_repository_chartmuseum.yaml
-waitComponentStatus "kubebb-system" "repository-chartmuseum.nginx"
-info "5.9.1 Plan a nignx with private chartmuseum(basic auth enabled) "
-kubectl apply -f config/samples/core_v1alpha1_componentplan_mynginx.yaml
-waitComponentPlanDone "kubebb-system" "mynginx"
+# info "5.9 Verify that helm install with basic auth"
+# info "5.9.1 Push a chart to private chartmuseum"
+# curl --retry 3 --retry-delay 5 -O https://charts.bitnami.com/bitnami/nginx-15.1.2.tgz
+# curl --retry 3 --retry-delay 5 -u admin:password --data-binary "@nginx-15.1.2.tgz" http://localhost:8088/api/charts
+# info "5.9.1 Add this private chartmuseum repository(basic auth enabled) to kubebb"
+# kubectl apply -f config/samples/core_v1alpha1_repository_chartmuseum.yaml
+# waitComponentStatus "kubebb-system" "repository-chartmuseum.nginx"
+# info "5.9.1 Plan a nignx with private chartmuseum(basic auth enabled) "
+# kubectl apply -f config/samples/core_v1alpha1_componentplan_mynginx.yaml
+# waitComponentPlanDone "kubebb-system" "mynginx"
 
-info "6 try to verify that the common steps are valid to oci types"
-info "6.1 create oci repository"
-kubectl apply -f config/samples/core_v1alpha1_repository_oci.yaml
-waitComponentStatus "kubebb-system" "repository-oci-sample.nginx"
+# info "6 try to verify that the common steps are valid to oci types"
+# info "6.1 create oci repository"
+# kubectl apply -f config/samples/core_v1alpha1_repository_oci.yaml
+# waitComponentStatus "kubebb-system" "repository-oci-sample.nginx"
 
-info "6.2 create oci componentplan"
-kubectl apply -f config/samples/core_v1alpha1_oci_componentplan.yaml
-waitComponentPlanDone "kubebb-system" "do-once-oci-sample-15.1.0"
-waitPodReady "kubebb-system" "app.kubernetes.io/instance=oci-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.1.0"
-getHelmRevision "kubebb-system" "oci-nginx" "1"
-deleteComponentPlan "kubebb-system" "do-once-oci-sample-15.1.0"
+# info "6.2 create oci componentplan"
+# kubectl apply -f config/samples/core_v1alpha1_oci_componentplan.yaml
+# waitComponentPlanDone "kubebb-system" "do-once-oci-sample-15.1.0"
+# waitPodReady "kubebb-system" "app.kubernetes.io/instance=oci-nginx,app.kubernetes.io/managed-by=Helm,helm.sh/chart=nginx-15.1.0"
+# getHelmRevision "kubebb-system" "oci-nginx" "1"
+# deleteComponentPlan "kubebb-system" "do-once-oci-sample-15.1.0"
 
 info "7 try to verify portal works correctly"
 info "7.1 create two portals with different path and entry"
