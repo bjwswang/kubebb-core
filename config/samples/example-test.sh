@@ -597,6 +597,6 @@ checkDuplicatePortal "portal-example-duplicate" "portal-example,portal-example-a
 info "7.4 delete the duplicate portal and check the original portal"
 kubectl delete Portal portal-example-another
 checkDuplicatePortal "portal-example" "portal-example-duplicate" "portal-example-duplicate"
-checkDuplicatePortal "portal-example-another" "portal-example" "portal-example"
+checkDuplicatePortal "portal-example-duplicate" "portal-example" "portal-example"
 
 info "all finished! ✅"
