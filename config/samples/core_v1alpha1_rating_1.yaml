@@ -6,9 +6,9 @@ metadata:
 spec:
   evaluator:
     llm: zhipuai
-  componentName: repository-kubebb.kubebb-core
+  componentName: kubebb.kubebb-core
   pipelineParams:
-    - pipelineName: component-reliability
+    - pipelineName: kubebb-core-reliability
       dimension: "reliability"
       params:
         - name: URL
@@ -19,7 +19,7 @@ spec:
             objectVal: {}
         - name: COMPONENT_NAME
           value:
-            stringVal: repository-kubebb.kubebb-core
+            stringVal: kubebb.kubebb-core
             type: string
         - name: VERSION
           value:
@@ -27,5 +27,5 @@ spec:
             type: string
         - name: REPOSITORY_NAME
           value:
-            stringVal: repository-kubebb
+            stringVal: kubebb
             type: string
